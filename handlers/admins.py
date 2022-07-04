@@ -77,7 +77,7 @@ async def skip(_, message: Message):
     for x in callsmusic.pytgcalls.active_calls:
         ACTV_CALLS.append(int(x.chat_id))
     if int(chat_id) not in ACTV_CALLS:
-        
+
         await message.reply_text(
             "ᴡᴛғ, ᴘʟᴀʏ ᴛʜᴇ sᴏɴɢ ғɪʀsᴛ ɪɴ ᴏʀᴅᴇʀ ᴛᴏ sᴋɪᴘ ᴛᴀᴛ🙄!",
             reply_markup=InlineKeyboardMarkup(BUTTON)
@@ -85,7 +85,7 @@ async def skip(_, message: Message):
         await message.delete()
     else:
         queues.task_done(chat_id)
-        
+
         if queues.is_empty(chat_id):
             await callsmusic.pytgcalls.leave_group_call(chat_id)
         else:
