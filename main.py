@@ -29,7 +29,6 @@ async def main():
             pass
         except Exception as e:
             print(e)
-            pass
 
 bot.start()
 run()

@@ -17,13 +17,11 @@ def time_to_seconds(time):
 @Client.on_message(filters.command('song') & ~filters.private & ~filters.channel)
 def song(client, message):
 
-    user_id = message.from_user.id 
-    user_name = message.from_user.first_name 
-    rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
+    rpk = f"[{user_name}](tg://user?id={str(user_id)})"
 
-    query = ''
-    for i in message.command[1:]:
-        query += ' ' + str(i)
+    query = ''.join(f' {str(i)}' for i in message.command[1:])
     print(query)
     m = message.reply("ᴡᴀɪᴛ, sᴇᴀʀᴄʜɪɴɢ ʏᴏᴜʀ ǫᴜᴀʀʏ ғʀᴏᴍ ᴅᴇᴛᴀʙᴀsᴇ👩‍💻...")
     ydl_opts = {"format": "bestaudio[ext=m4a]"}
@@ -46,7 +44,7 @@ def song(client, message):
         m.edit(
             "ᴏᴘᴘs, sᴏʀʀʏ ɴᴛɢ ɪᴢ ғᴏᴜɴᴅ ᴄʜᴇᴄᴋ ʏᴏᴜʀ sᴘᴇʟʟɪɴɢ ɴᴅ sᴇᴀʀᴄʜ ᴀɢᴀɪɴ🧚‍♀️🧚‍♀️"
         )
-        print(str(e))
+        print(e)
         return
     m.edit("ʏᴏ, ʏᴏᴜʀ sᴏɴɢ ɪᴢ ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ ғʀᴏᴍ ᴅᴇᴠᴜ sᴇʀᴠᴇʀ🥀🥀.")
     try:
@@ -54,7 +52,7 @@ def song(client, message):
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        rep = f"**ᴜᴘʟᴏᴀᴅᴇʀ🥀 :-  [ᴅᴇᴠᴜ-ʀᴏʙᴏᴛ🧚‍♀️](https://t.me/DEVU_ROBOT)**"
+        rep = "**ᴜᴘʟᴏᴀᴅᴇʀ🥀 :-  [ᴅᴇᴠᴜ-ʀᴏʙᴏᴛ🧚‍♀️](https://t.me/DEVU_ROBOT)**"
         secmul, dur, dur_arr = 1, 0, duration.split(':')
         for i in range(len(dur_arr)-1, -1, -1):
             dur += (int(dur_arr[i]) * secmul)

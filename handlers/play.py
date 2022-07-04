@@ -55,8 +55,7 @@ def changeImageSize(maxWidth, maxHeight, image):
     heightRatio = maxHeight / image.size[1]
     newWidth = int(widthRatio * image.size[0])
     newHeight = int(heightRatio * image.size[1])
-    newImage = image.resize((newWidth, newHeight))
-    return newImage
+    return image.resize((newWidth, newHeight))
 
 async def generate_cover(requested_by, title, views, duration, thumbnail):
     async with aiohttp.ClientSession() as session:
@@ -141,22 +140,24 @@ async def play(_, message: Message):
                     pass
                 except Exception:
                     await lel.edit(
-                        f"<b><i>ᴜɴᴀʙʟᴇ ᴛᴏ ᴘʟᴀʏ sᴏɴɢs😕, ᴍᴀᴋᴇ sᴜʀᴇ ᴀssɪsᴛᴀɴᴛ ɪᴢ ɴᴏᴛ ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ ɴᴅ ᴛʀʏ ᴀɢᴀɪɴ🤷‍♀️</i></b>")
-    
+                        "<b><i>ᴜɴᴀʙʟᴇ ᴛᴏ ᴘʟᴀʏ sᴏɴɢs😕, ᴍᴀᴋᴇ sᴜʀᴇ ᴀssɪsᴛᴀɴᴛ ɪᴢ ɴᴏᴛ ʙᴀɴɴᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ ɴᴅ ᴛʀʏ ᴀɢᴀɪɴ🤷‍♀️</i></b>"
+                    )
+
+
     try:
         await USER.get_chat(chid)
     except:
         await lel.edit(
             f"<i><b>ᴏᴏᴘs sᴏʀʀʏ {user.first_name}, ᴀssɪsᴛᴀɴᴛ ɪᴢ ɴᴏᴛ ɪɴ ᴛʜɪs ᴄʜᴀᴛ ᴘʟɪsʜ ᴛᴇʟʟ ʏᴏᴜʀ ᴀᴅᴍɪɴs ᴜsᴇ /joinub ᴄᴏᴍᴀɴᴅ ʙᴇғᴏʀᴇ ᴘʟᴀʏ sᴏɴɢs💁‍♂️</b></i>")
         return
-    
+
     audio = (
         (message.reply_to_message.audio or message.reply_to_message.voice)
         if message.reply_to_message
         else None
     )
     url = get_url(message)
-    
+
     if audio:
         if round(audio.duration / 360) > DURATION_LIMIT:
             raise DurationLimitError(
@@ -174,25 +175,29 @@ async def play(_, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                            text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀",
-                            url=f"https://t.me/SILENT_DEVS"),
+                        text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀", url="https://t.me/SILENT_DEVS"
+                    ),
                     InlineKeyboardButton(
-                            text="ᴜᴘᴅᴀᴛᴇs👾",
-                            url=f"https://t.me/SILENT_BOTS"),
-               ],
-               [
-                   InlineKeyboardButton(text="Close Menu", callback_data="close_"),                   
-               ],
+                        text="ᴜᴘᴅᴀᴛᴇs👾", url="https://t.me/SILENT_BOTS"
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="Close Menu", callback_data="close_"
+                    ),
+                ],
             ]
         )
-    
+
+
         requested_by = message.from_user.first_name
         await generate_cover(requested_by, title, views, duration, thumbnail)
         file_path = await converter.convert(
-            (await message.reply_to_message.download(file_name))
-            if not path.isfile(path.join("downloads", file_name))
-            else file_name
+            file_name
+            if path.isfile(path.join("downloads", file_name))
+            else await message.reply_to_message.download(file_name)
         )
+
 
     elif url:
         try:
@@ -215,42 +220,48 @@ async def play(_, message: Message):
                 secmul *= 60
 
             keyboard = InlineKeyboardMarkup(
-            [
                 [
-                    InlineKeyboardButton(
-                            text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀",
-                            url=f"https://t.me/SILENT_DEVS"),
-                    InlineKeyboardButton(
-                            text="ᴜᴘᴅᴀᴛᴇs👾",
-                            url=f"https://t.me/SILENT_BOTS"),
-               ],
-               [
-                   InlineKeyboardButton(text="Close Menu", callback_data="close_"),                   
-               ],
-            ]
-        )
-    
+                    [
+                        InlineKeyboardButton(
+                            text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀", url="https://t.me/SILENT_DEVS"
+                        ),
+                        InlineKeyboardButton(
+                            text="ᴜᴘᴅᴀᴛᴇs👾", url="https://t.me/SILENT_BOTS"
+                        ),
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Close Menu", callback_data="close_"
+                        ),
+                    ],
+                ]
+            )
+
+
         except Exception as e:
             title = "NaN"
             thumb_name = "https://telegra.ph/file/9350788513346feef5087.jpg"
             duration = "NaN"
             views = "NaN"
             keyboard = InlineKeyboardMarkup(
-            [
                 [
-                    InlineKeyboardButton(
-                            text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀",
-                            url=f"https://t.me/SILENT_DEVS"),
-                    InlineKeyboardButton(
-                            text="ᴜᴘᴅᴀᴛᴇs👾",
-                            url=f"https://t.me/SILENT_BOTS"),
-               ],
-               [
-                   InlineKeyboardButton(text="Close Menu", callback_data="close_"),                   
-               ],
-            ]
-        )
-    
+                    [
+                        InlineKeyboardButton(
+                            text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀", url="https://t.me/SILENT_DEVS"
+                        ),
+                        InlineKeyboardButton(
+                            text="ᴜᴘᴅᴀᴛᴇs👾", url="https://t.me/SILENT_BOTS"
+                        ),
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            text="Close Menu", callback_data="close_"
+                        ),
+                    ],
+                ]
+            )
+
+
         if (dur / 360) > DURATION_LIMIT:
             await lel.edit(
                 f"**ɢɪᴠᴇɴ ǫᴜᴀʀʏ ɪᴢ ʟᴏɴɢᴇʀ ᴛʜᴀɴ {DURATION_LIMIT} ᴛᴀᴛ ᴀʀᴇɴ'ᴛ ᴀʟʟᴏᴡ ᴛᴏ ᴘʟᴀʏ ᴅᴜᴇ ᴛᴏ ʜᴀᴠᴇʏ ᴜsᴀɢᴇ😕🤷‍♀️**"
@@ -291,25 +302,28 @@ async def play(_, message: Message):
             await lel.edit(
                 "**ɴᴛɢ ɪᴢ ғᴏᴜɴᴅ ᴄʜᴇᴄᴋ ʏᴏᴜʀ ǫᴜᴇʀʏ ɴᴀᴍᴇ ɴᴅ ᴛʀʏ ᴀɢᴀɪɴ🧚‍♀️.**"
             )
-            print(str(e))
+            print(e)
             return
 
         keyboard = InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                            text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀",
-                            url=f"https://t.me/SILENT_DEVS"),
+                        text="ᴛᴇᴀᴍ-sɪʟᴇɴᴛ🥀", url="https://t.me/SILENT_DEVS"
+                    ),
                     InlineKeyboardButton(
-                            text="ᴜᴘᴅᴀᴛᴇs👾",
-                            url=f"https://t.me/SILENT_BOTS"),
-               ],
-               [
-                   InlineKeyboardButton(text="Close Menu", callback_data="close_"),                   
-               ],               
+                        text="ᴜᴘᴅᴀᴛᴇs👾", url="https://t.me/SILENT_BOTS"
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="Close Menu", callback_data="close_"
+                    ),
+                ],
             ]
         )
-    
+
+
         if (dur / 60) > DURATION_LIMIT:
             await lel.edit(
                 f"**ɢɪᴠᴇɴ ǫᴜᴀʀʏ ɪᴢ ʟᴏɴɢᴇʀ ᴛʜᴀɴ {DURATION_LIMIT} ᴛᴀᴛ ᴀʀᴇɴ'ᴛ ᴀʟʟᴏᴡ ᴛᴏ ᴘʟᴀʏ ᴅᴜᴇ ᴛᴏ ʜᴀᴠᴇʏ ᴜsᴀɢᴇ😕🤷‍♀️**"
@@ -318,19 +332,18 @@ async def play(_, message: Message):
         requested_by = message.from_user.first_name
         await generate_cover(requested_by, title, views, duration, thumbnail)
         file_path = await converter.convert(youtube.download(url))
-    ACTV_CALLS = []
     chat_id = message.chat.id
-    for x in callsmusic.pytgcalls.active_calls:
-        ACTV_CALLS.append(int(x.chat_id))
+    ACTV_CALLS = [int(x.chat_id) for x in callsmusic.pytgcalls.active_calls]
     if int(chat_id) in ACTV_CALLS:
-        position = await queues.put(chat_id, file=file_path)      
+        position = await queues.put(chat_id, file=file_path)
         await message.reply_photo(
             photo="final.png",
-            caption="****ᴏᴋᴋ, ʏᴏᴜʀ sᴏɴɢ ɪᴢ ᴀᴅᴅᴇᴅ ɪɴ ᴛʜᴇ ǫᴜᴇᴜᴇ🥀💖 \n\nʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ: {} \nᴘᴏsɪᴛɪᴏɴ :-** {}**".format(usrid, position),
+            caption=f"****ᴏᴋᴋ, ʏᴏᴜʀ sᴏɴɢ ɪᴢ ᴀᴅᴅᴇᴅ ɪɴ ᴛʜᴇ ǫᴜᴇᴜᴇ🥀💖 \n\nʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ: {usrid} \nᴘᴏsɪᴛɪᴏɴ :-** {position}**",
             reply_markup=keyboard,
         )
+
         await message.delete()
-    
+
     else:
         await callsmusic.pytgcalls.join_group_call(
                 chat_id, 
@@ -348,7 +361,7 @@ async def play(_, message: Message):
             caption="**ɴᴏᴡ ɪ ᴍ ᴘʟᴀʏɪɴɢ ᴛʜᴇ ǫᴜᴇᴜᴇᴅ sᴏɴɢ💖🧚‍♀️.\n\nᴘʟᴀʏɪɴɢ ᴀᴛ🧚‍♀️ :- `{}`...**\nʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ: {}".format(
         message.chat.title, usrid
         ), )
-        
-    
+
+
     os.remove("final.png")
     return await lel.delete()
